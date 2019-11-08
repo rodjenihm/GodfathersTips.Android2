@@ -14,4 +14,31 @@
     <string name="please_wait">Please wait…</string>
     <string name="loading_user_data">Loading user data…</string>
     <string name="loading_user_data_error">Error loading user data…</string>
+
+    <string name="email_required">Email address is required</string>
+    <string name="email_invalid">Email address is not valid</string>
+    <string name="password_required">Password is required</string>
+    <string name="password_invalid">Password should be at least 6 characters long</string>
+    <string name="password_confirm_required">Confirm password</string>
+    <string name="password_confirm_invalid">Passwords don\'t match</string>
+
+    <string name="email_confirm_require">Please confirm your email address to complete Sign Up process</string>
+
+    <string name="creating_account">Creating account…</string>
+    <string name="creating_account_success">Account successfully created</string>
+    <string name="creating_account_failure">Error creating account</string>
+
+    <string name="creating_user_failure">Error updating users table</string>
+
+    <string name="creating_role_failure">Error updating roles table</string>
+
+    <string name="signing_in">Signing In…</string>
+    <string name="signing_in_failure">Sign In failed</string>
+
+
+    <string name="reset_link_sending">Sending reset link to email address…</string>
+    <string name="reset_link_not_sent">Could not sent reset link</string>
+    <string name="reset_link_sent">Reset link sent</string>
+    <string name="reset_link_sent_message">Check your email</string>
+
 </resources>
