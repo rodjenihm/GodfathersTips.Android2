@@ -27,7 +27,7 @@ public class AuthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth);
 
         drawer = buildAuthMaterialDrawer();
-        setFragment(SignInFragment.class);
+        Utilities.setFragment(fragmentManager, SignInFragment.class, R.id.flAuth);
     }
 
     private Drawer buildAuthMaterialDrawer() {
@@ -76,16 +76,5 @@ public class AuthActivity extends AppCompatActivity {
         drawerBuilder.addDrawerItems(itemSignIn, itemCreateAccount, itemResetPassword, new DividerDrawerItem());
 
         return drawerBuilder.build();
-    }
-
-    private boolean setFragment(Class fragmentClass) {
-        try {
-            Fragment fragment = (Fragment) fragmentClass.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.flAuth, fragment).commit();
-            drawer.closeDrawer();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
     }
 }
