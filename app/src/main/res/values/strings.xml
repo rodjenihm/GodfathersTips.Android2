@@ -41,4 +41,6 @@
     <string name="reset_link_sent">Reset link sent</string>
     <string name="reset_link_sent_message">Check your email</string>
 
+    <string name="drawer_item_users">Users</string>
+
 </resources>

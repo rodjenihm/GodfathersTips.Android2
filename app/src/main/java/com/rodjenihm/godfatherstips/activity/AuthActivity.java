@@ -76,13 +76,13 @@ public class AuthActivity extends AppCompatActivity {
         DrawerBuilder drawerBuilder = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
-                .withSliderBackgroundColor(getResources().getColor(R.color.colorBackground));
+                .withSliderBackgroundColor(getResources().getColor(R.color.colorBackgroundDark));
 
         PrimaryDrawerItem itemSignIn =
                 new PrimaryDrawerItem()
                         .withName(R.string.sign_in)
                         .withIcon(R.drawable.ic_profile)
-                        .withTextColor(getResources().getColor(R.color.colorTextDark))
+                        .withTextColor(getResources().getColor(R.color.colorTextLight))
                         .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                             Utilities.setFragment(fragmentManager, SignInFragment.class, R.id.flAuth);
                             drawer.closeDrawer();
@@ -93,7 +93,7 @@ public class AuthActivity extends AppCompatActivity {
                 new PrimaryDrawerItem()
                         .withName(R.string.create_account)
                         .withIcon(R.drawable.ic_create_account)
-                        .withTextColor(getResources().getColor(R.color.colorTextDark))
+                        .withTextColor(getResources().getColor(R.color.colorTextLight))
                         .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                             Utilities.setFragment(fragmentManager, CreateAccountFragment.class, R.id.flAuth);
                             drawer.closeDrawer();
@@ -104,7 +104,7 @@ public class AuthActivity extends AppCompatActivity {
                 new PrimaryDrawerItem()
                         .withName(R.string.reset_password)
                         .withIcon(R.drawable.ic_password)
-                        .withTextColor(getResources().getColor(R.color.colorTextDark))
+                        .withTextColor(getResources().getColor(R.color.colorTextLight))
                         .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                             Utilities.setFragment(fragmentManager, ResetPasswordFragment.class, R.id.flAuth);
                             drawer.closeDrawer();
