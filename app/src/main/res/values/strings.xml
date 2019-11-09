@@ -43,11 +43,17 @@
 
     <string name="drawer_item_users">Users</string>
     <string name="drawer_item_share">Share</string>
+    <string name="drawer_item_tips_add">Add Tip</string>
 
     <string name="email_label">Email:</string>
     <string name="created_at_label">Registration Date:</string>
     <string name="status_label">Status:</string>
     <string name="toggle_vip_status">Toggle VIP status</string>
 
-
+    <string name="rivals">Rivals</string>
+    <string name="time">Time</string>
+    <string name="tip">Tip</string>
+    <string name="add_tip">Add Tip</string>
+    <string name="odds">Odds</string>
+    <string name="tip_successfully_added">Tip successfully added</string>
 </resources>

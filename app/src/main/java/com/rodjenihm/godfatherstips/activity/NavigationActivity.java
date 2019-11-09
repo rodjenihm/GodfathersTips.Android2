@@ -52,7 +52,7 @@ public class NavigationActivity extends AppCompatActivity {
                                 .withEmail(user.getEmail())
                                 .withIcon(getResources().getDrawable(R.drawable.ic_profile))
                 )
-                .withTextColor(getResources().getColor(R.color.colorTextLight))
+                .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnAccountHeaderListener((view, profile, currentProfile) -> false)
                 .build();
 
@@ -150,10 +150,10 @@ public class NavigationActivity extends AppCompatActivity {
         PrimaryDrawerItem itemShare = new PrimaryDrawerItem()
                 .withName(R.string.drawer_item_share)
                 .withIcon(getResources().getDrawable(R.drawable.ic_share))
-                .withTextColor(getResources().getColor(R.color.colorTextLight))
+                .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    showShareMenu();
                     drawer.closeDrawer();
+                    showShareMenu();
                     return true;
                 });
 
@@ -161,10 +161,10 @@ public class NavigationActivity extends AppCompatActivity {
                 .withEnabled(accessLevel == 3)
                 .withName(R.string.drawer_item_users)
                 .withIcon(getResources().getDrawable(R.drawable.ic_users))
-                .withTextColor(getResources().getColor(R.color.colorTextLight))
+                .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    Utilities.setFragment(fragmentManager, UsersFragment.class, R.id.flContent);
                     drawer.closeDrawer();
+                    Utilities.setFragment(fragmentManager, UsersFragment.class, R.id.flContent);
                     return true;
                 });
 
@@ -172,7 +172,7 @@ public class NavigationActivity extends AppCompatActivity {
                 new PrimaryDrawerItem()
                         .withName(R.string.sign_out)
                         .withIcon(R.drawable.ic_sign_out)
-                        .withTextColor(getResources().getColor(R.color.colorTextLight))
+                        .withTextColor(getResources().getColor(R.color.colorText))
                         .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                             mAuth.signOut();
                             startActivity(new Intent(this, AuthActivity.class));
@@ -194,7 +194,7 @@ public class NavigationActivity extends AppCompatActivity {
                         itemUsers,
                         new DividerDrawerItem(),
                         itemSignOut)
-                .withSliderBackgroundColor(getResources().getColor(R.color.colorBackgroundDark));
+                .withSliderBackgroundColor(getResources().getColor(R.color.colorBackground));
 
         return drawerBuilder.build();
     }

@@ -16,6 +16,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="ToolbarColoredSandwich" parent="AppTheme">
-        <item name="android:textColorSecondary">@color/colorTextDark</item>
+        <item name="android:textColorSecondary">@color/colorText</item>
     </style>
 </resources>
