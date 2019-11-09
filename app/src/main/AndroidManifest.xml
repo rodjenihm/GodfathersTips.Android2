@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activity.NavigationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop"></activity>
         <activity
             android:name=".activity.AuthActivity"
             android:screenOrientation="portrait"

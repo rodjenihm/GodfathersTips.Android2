@@ -147,6 +147,16 @@ public class NavigationActivity extends AppCompatActivity {
                     return true;
                 });*/
 
+        PrimaryDrawerItem itemShare = new PrimaryDrawerItem()
+                .withName(R.string.drawer_item_share)
+                .withIcon(getResources().getDrawable(R.drawable.ic_share))
+                .withTextColor(getResources().getColor(R.color.colorTextLight))
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    showShareMenu();
+                    drawer.closeDrawer();
+                    return true;
+                });
+
         PrimaryDrawerItem itemUsers = new PrimaryDrawerItem()
                 .withEnabled(accessLevel == 3)
                 .withName(R.string.drawer_item_users)
@@ -174,14 +184,27 @@ public class NavigationActivity extends AppCompatActivity {
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .addDrawerItems(//itemHome, itemAbout, itemContact, itemShare,
-                        //new DividerDrawerItem(),
-                        //itemTips, itemChat, itemUsers,
+                .addDrawerItems(
+                        // Put MEMBER items here
+                        itemShare,
+                        new DividerDrawerItem(),
+                        // Put VIP items here
+                        new DividerDrawerItem(),
+                        // Put ADMIN items here
                         itemUsers,
                         new DividerDrawerItem(),
                         itemSignOut)
                 .withSliderBackgroundColor(getResources().getColor(R.color.colorBackgroundDark));
 
         return drawerBuilder.build();
+    }
+
+    private void showShareMenu() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Postanite deo Godfathers zajednice i uverite se zasto smo najbolji {link ka aplikaciji}";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share subject");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 }
