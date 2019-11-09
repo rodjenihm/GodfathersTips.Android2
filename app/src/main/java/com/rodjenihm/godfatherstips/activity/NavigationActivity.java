@@ -13,8 +13,10 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.Utilities;
 import com.rodjenihm.godfatherstips.fragment.UsersFragment;
@@ -147,6 +149,7 @@ public class NavigationActivity extends AppCompatActivity {
                     return true;
                 });*/
 
+        // Common items
         PrimaryDrawerItem itemShare = new PrimaryDrawerItem()
                 .withName(R.string.drawer_item_share)
                 .withIcon(getResources().getDrawable(R.drawable.ic_share))
@@ -157,6 +160,29 @@ public class NavigationActivity extends AppCompatActivity {
                     return true;
                 });
 
+        // Tip items
+        SecondaryDrawerItem itemTipsAdd = new SecondaryDrawerItem()
+                .withEnabled(accessLevel == 3)
+                .withLevel(4)
+                .withName(R.string.drawer_item_tips_add)
+                .withTextColor(getResources().getColor(R.color.colorText))
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    startActivity(new Intent(this, AddTipActivity.class));
+                    return true;
+                });
+
+        ExpandableDrawerItem itemTips = new ExpandableDrawerItem()
+                .withEnabled(accessLevel > 1)
+                .withName(R.string.drawer_item_tips)
+                .withTextColor(getResources().getColor(R.color.colorText))
+                .withIcon(getResources().getDrawable(R.drawable.ic_tip))
+                .withArrowColor(getResources().getColor(R.color.colorText))
+                .withSubItems(
+                        //itemTipsHot,
+                        //itemTipsHistory,
+                        itemTipsAdd);
+
+        // Users item
         PrimaryDrawerItem itemUsers = new PrimaryDrawerItem()
                 .withEnabled(accessLevel == 3)
                 .withName(R.string.drawer_item_users)
@@ -168,6 +194,7 @@ public class NavigationActivity extends AppCompatActivity {
                     return true;
                 });
 
+        // Sign Out item
         PrimaryDrawerItem itemSignOut =
                 new PrimaryDrawerItem()
                         .withName(R.string.sign_out)
@@ -185,12 +212,14 @@ public class NavigationActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        // Put MEMBER items here
+                        // Put common items here
                         itemShare,
                         new DividerDrawerItem(),
-                        // Put VIP items here
+                        // Put Tip items here
+                        itemTips,
+                        // Put Chat item here
                         new DividerDrawerItem(),
-                        // Put ADMIN items here
+                        // Put Users item here
                         itemUsers,
                         new DividerDrawerItem(),
                         itemSignOut)
