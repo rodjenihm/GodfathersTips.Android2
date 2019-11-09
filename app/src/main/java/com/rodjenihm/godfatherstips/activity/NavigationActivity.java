@@ -19,6 +19,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.Utilities;
+import com.rodjenihm.godfatherstips.fragment.TipsFragment;
 import com.rodjenihm.godfatherstips.fragment.UsersFragment;
 import com.rodjenihm.godfatherstips.model.AppUser;
 
@@ -161,6 +162,17 @@ public class NavigationActivity extends AppCompatActivity {
                 });
 
         // Tip items
+        SecondaryDrawerItem itemTipsActive = new SecondaryDrawerItem()
+                .withEnabled(accessLevel > 1)
+                .withLevel(4)
+                .withName(R.string.drawer_item_tips_active)
+                .withTextColor(getResources().getColor(R.color.colorText))
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    drawer.closeDrawer();
+                    Utilities.setFragment(fragmentManager, TipsFragment.class, R.id.flContent);
+                    return true;
+                });
+
         SecondaryDrawerItem itemTipsAdd = new SecondaryDrawerItem()
                 .withEnabled(accessLevel == 3)
                 .withLevel(4)
@@ -178,7 +190,7 @@ public class NavigationActivity extends AppCompatActivity {
                 .withIcon(getResources().getDrawable(R.drawable.ic_tip))
                 .withArrowColor(getResources().getColor(R.color.colorText))
                 .withSubItems(
-                        //itemTipsHot,
+                        itemTipsActive,
                         //itemTipsHistory,
                         itemTipsAdd);
 

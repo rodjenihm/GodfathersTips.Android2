@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:background="@drawable/user_custom"
-    android:orientation="vertical">
+    android:background="@drawable/user_custom" >
 
     <TextView
         android:id="@+id/email_label"
