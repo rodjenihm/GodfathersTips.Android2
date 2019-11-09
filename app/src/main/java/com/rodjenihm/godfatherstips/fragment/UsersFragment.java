@@ -17,6 +17,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.UserViewHolder;
@@ -27,12 +28,23 @@ import com.rodjenihm.godfatherstips.model.AppUser;
  * A simple {@link Fragment} subclass.
  */
 public class UsersFragment extends Fragment {
-
+    private FirestoreRecyclerAdapter adapter;
 
     public UsersFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,11 +54,10 @@ public class UsersFragment extends Fragment {
 
         Query query = FirebaseFirestore.getInstance().collection("users");
         FirestoreRecyclerOptions<AppUser> options = new FirestoreRecyclerOptions.Builder<AppUser>()
-                .setLifecycleOwner(this)
                 .setQuery(query, AppUser.class)
                 .build();
 
-        FirestoreRecyclerAdapter adapter = new FirestoreRecyclerAdapter<AppUser, UserViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<AppUser, UserViewHolder>(options) {
             @Override
             public void onBindViewHolder(UserViewHolder holder, int position, AppUser model) {
                 String status;
@@ -87,8 +98,9 @@ public class UsersFragment extends Fragment {
                                             .collection("roles")
                                             .document("VIP")
                                             .update("users", FieldValue.arrayUnion(Uid))
-                                            .addOnFailureListener(e -> Toast.makeText(holder.view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                                });
+                                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
                     } else {
                         FirebaseFirestore.getInstance()
                                 .collection("users")
@@ -99,8 +111,9 @@ public class UsersFragment extends Fragment {
                                             .collection("roles")
                                             .document("VIP")
                                             .update("users", FieldValue.arrayRemove(Uid))
-                                            .addOnFailureListener(e -> Toast.makeText(holder.view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                                });
+                                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
                     }
                 });
             }

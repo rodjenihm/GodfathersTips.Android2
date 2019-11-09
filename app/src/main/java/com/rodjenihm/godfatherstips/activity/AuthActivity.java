@@ -57,12 +57,12 @@ public class AuthActivity extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         dlg.dismiss();
+                        //recreate();
                         Utilities.showAlertDialog(
                                 this,
                                 getResources().getString(R.string.loading_user_data_error),
                                 e.getLocalizedMessage(),
                                 mAuth::signOut);
-                        recreate();
                     });
         }
     }
