@@ -17,6 +17,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.Utilities;
+import com.rodjenihm.godfatherstips.fragment.UsersFragment;
 import com.rodjenihm.godfatherstips.model.AppUser;
 
 public class NavigationActivity extends AppCompatActivity {
@@ -152,7 +153,8 @@ public class NavigationActivity extends AppCompatActivity {
                 .withIcon(getResources().getDrawable(R.drawable.ic_users))
                 .withTextColor(getResources().getColor(R.color.colorTextLight))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    //Utilities.setFragment(fragmentManager, UserFragment.class, R.id.flContent);
+                    Utilities.setFragment(fragmentManager, UsersFragment.class, R.id.flContent);
+                    drawer.closeDrawer();
                     return true;
                 });
 
