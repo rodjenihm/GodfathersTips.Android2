@@ -77,8 +77,10 @@ public class AddTipActivity extends AppCompatActivity {
     }
 
     private void addTip(String rivals, String time, String tip, String odds) {
+        String tipId = String.valueOf((DateFormat.format("yyyy-MM-dd-HH-mm-ss", new Date())));
+
         Tip obj = new Tip();
-        obj.setTipId(String.valueOf((DateFormat.format("yyyy-MM-dd-HH-mm-ss", new Date()))));
+        obj.setTipId(tipId);
         obj.setRivals(rivals);
         obj.setTime(time);
         obj.setTip(tip);
@@ -87,7 +89,8 @@ public class AddTipActivity extends AppCompatActivity {
 
         FirebaseFirestore.getInstance()
                 .collection("tips")
-                .add(obj)
+                .document(tipId)
+                .set(obj)
                 .addOnSuccessListener(documentReference -> {
                     clearAddTipFormData();
                     Toast.makeText(this, R.string.tip_successfully_added, Toast.LENGTH_LONG).show();

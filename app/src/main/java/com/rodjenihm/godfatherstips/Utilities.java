@@ -16,6 +16,14 @@ public abstract class Utilities {
         }
     }
 
+    public static void setFragment(FragmentManager fragmentManager, Fragment fragment, int containerViewId) {
+        try {
+            fragmentManager.beginTransaction().replace(containerViewId, fragment).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void showAlertDialog(Context context, String title, String message, Action action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(title)

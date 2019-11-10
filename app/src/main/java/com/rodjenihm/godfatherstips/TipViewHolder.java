@@ -1,6 +1,7 @@
 package com.rodjenihm.godfatherstips;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ public class TipViewHolder extends RecyclerView.ViewHolder {
     public final TextView timeView;
     public final TextView tipView;
     public final TextView oddsView;
+    public final Button archiveView;
     public Tip item;
 
     public TipViewHolder(@NonNull View itemView) {
@@ -23,6 +25,7 @@ public class TipViewHolder extends RecyclerView.ViewHolder {
         timeView = view.findViewById(R.id.time);
         tipView = view.findViewById(R.id.tip);
         oddsView = view.findViewById(R.id.odds);
+        archiveView = view.findViewById(R.id.archive);
     }
 
     @Override
@@ -33,6 +36,7 @@ public class TipViewHolder extends RecyclerView.ViewHolder {
                 ", timeView=" + timeView +
                 ", tipView=" + tipView +
                 ", oddsView=" + oddsView +
+                ", archiveView=" + archiveView +
                 ", item=" + item +
                 '}';
     }

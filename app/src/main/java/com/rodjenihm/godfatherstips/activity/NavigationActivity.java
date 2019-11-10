@@ -2,6 +2,7 @@ package com.rodjenihm.godfatherstips.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
@@ -169,7 +170,8 @@ public class NavigationActivity extends AppCompatActivity {
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                     drawer.closeDrawer();
-                    Utilities.setFragment(fragmentManager, TipsFragment.class, R.id.flContent);
+                    Fragment fragment = TipsFragment.newInstance(accessLevel);
+                    Utilities.setFragment(fragmentManager, fragment, R.id.flContent);
                     return true;
                 });
 

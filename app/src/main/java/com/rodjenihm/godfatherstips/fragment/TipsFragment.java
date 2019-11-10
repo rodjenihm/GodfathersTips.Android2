@@ -1,6 +1,7 @@
 package com.rodjenihm.godfatherstips.fragment;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -28,9 +29,28 @@ import com.rodjenihm.godfatherstips.model.Tip;
  */
 public class TipsFragment extends Fragment {
     private FirestoreRecyclerAdapter adapter;
+    private static String ACCESS_LEVEL = "accessLevel";
+    private int accessLevel = 1;
 
     public TipsFragment() {
         // Required empty public constructor
+    }
+
+    public static TipsFragment newInstance(int accessLevel) {
+        TipsFragment fragment = new TipsFragment();
+        Bundle args = new Bundle();
+        args.putInt(ACCESS_LEVEL, accessLevel);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            accessLevel = getArguments().getInt(ACCESS_LEVEL);
+        }
     }
 
     @Override
@@ -64,12 +84,32 @@ public class TipsFragment extends Fragment {
                 switch (status) {
                     case 1:
                         holder.view.setBackground(getResources().getDrawable(R.drawable.tip_active));
+                        if (accessLevel == 3) {
+                            holder.archiveView.setVisibility(View.VISIBLE);
+                            holder.archiveView.setOnClickListener(v -> {
+                                String[] options = {"won", "lost"};
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Pick tip status");
+                                builder.setItems(options, (dialog, which) -> {
+                                    String tipId = holder.item.getTipId();
+                                    FirebaseFirestore.getInstance()
+                                            .collection("tips")
+                                            .document(tipId)
+                                            .update("status", which + 2)
+                                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                                });
+                                builder.show();
+                            });
+                        }
                         break;
                     case 2:
                         holder.view.setBackground(getResources().getDrawable(R.drawable.tip_won));
+                        holder.archiveView.setVisibility(View.GONE);
                         break;
                     case 3:
                         holder.view.setBackground(getResources().getDrawable(R.drawable.tip_lost));
+                        holder.archiveView.setVisibility(View.GONE);
                         break;
                     default:
                         break;
