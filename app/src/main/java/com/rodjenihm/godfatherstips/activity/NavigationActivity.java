@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -170,7 +172,19 @@ public class NavigationActivity extends AppCompatActivity {
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                     drawer.closeDrawer();
-                    Fragment fragment = TipsFragment.newInstance(accessLevel);
+                    Fragment fragment = TipsFragment.newInstance(accessLevel, true);
+                    Utilities.setFragment(fragmentManager, fragment, R.id.flContent);
+                    return true;
+                });
+
+        SecondaryDrawerItem itemTipsHistory = new SecondaryDrawerItem()
+                .withEnabled(accessLevel > 1)
+                .withLevel(4)
+                .withName(R.string.drawer_item_tips_archive)
+                .withTextColor(getResources().getColor(R.color.colorText))
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    drawer.closeDrawer();
+                    Fragment fragment = TipsFragment.newInstance(accessLevel, false);
                     Utilities.setFragment(fragmentManager, fragment, R.id.flContent);
                     return true;
                 });
@@ -193,7 +207,7 @@ public class NavigationActivity extends AppCompatActivity {
                 .withArrowColor(getResources().getColor(R.color.colorText))
                 .withSubItems(
                         itemTipsActive,
-                        //itemTipsHistory,
+                        itemTipsHistory,
                         itemTipsAdd);
 
         // Users item

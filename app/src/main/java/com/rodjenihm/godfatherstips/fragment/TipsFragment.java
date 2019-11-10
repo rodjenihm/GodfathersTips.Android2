@@ -30,16 +30,19 @@ import com.rodjenihm.godfatherstips.model.Tip;
 public class TipsFragment extends Fragment {
     private FirestoreRecyclerAdapter adapter;
     private static String ACCESS_LEVEL = "accessLevel";
+    private static String ACTIVE = "active";
     private int accessLevel = 1;
+    private boolean active = true;
 
     public TipsFragment() {
         // Required empty public constructor
     }
 
-    public static TipsFragment newInstance(int accessLevel) {
+    public static TipsFragment newInstance(int accessLevel, boolean active) {
         TipsFragment fragment = new TipsFragment();
         Bundle args = new Bundle();
         args.putInt(ACCESS_LEVEL, accessLevel);
+        args.putBoolean(ACTIVE, active);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,6 +53,7 @@ public class TipsFragment extends Fragment {
 
         if (getArguments() != null) {
             accessLevel = getArguments().getInt(ACCESS_LEVEL);
+            active = getArguments().getBoolean(ACTIVE);
         }
     }
 
@@ -71,7 +75,13 @@ public class TipsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tips, container, false);
 
-        Query query = FirebaseFirestore.getInstance().collection("tips");
+        Query query;
+        if (active) {
+            query = FirebaseFirestore.getInstance().collection("tips").whereEqualTo("status", 1);
+        } else {
+            query = FirebaseFirestore.getInstance().collection("tips").whereGreaterThan("status", 1);
+        }
+
         FirestoreRecyclerOptions<Tip> options = new FirestoreRecyclerOptions.Builder<Tip>()
                 .setQuery(query, Tip.class)
                 .build();
