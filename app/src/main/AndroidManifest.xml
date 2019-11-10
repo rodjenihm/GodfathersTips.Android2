@@ -12,6 +12,7 @@
         <activity android:name=".activity.AddTipActivity"
             android:label="@string/add_tip"
             android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="orientation"
             android:parentActivityName=".activity.NavigationActivity"></activity>
         <activity
             android:name=".activity.NavigationActivity"
@@ -20,6 +21,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AuthActivity"
+            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
