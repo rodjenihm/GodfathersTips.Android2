@@ -16,6 +16,7 @@
         <activity
             android:name=".activity.NavigationActivity"
             android:launchMode="singleTop"
+            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AuthActivity"

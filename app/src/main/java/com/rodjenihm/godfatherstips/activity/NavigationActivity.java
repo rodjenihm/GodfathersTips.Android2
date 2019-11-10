@@ -258,7 +258,7 @@ public class NavigationActivity extends AppCompatActivity {
                         itemUsers,
                         new DividerDrawerItem(),
                         itemSignOut)
-                .withSliderBackgroundColor(getResources().getColor(R.color.colorBackground));
+                .withSliderBackgroundColor(getResources().getColor(R.color.colorBackgroundTransparent));
 
         return drawerBuilder.build();
     }
