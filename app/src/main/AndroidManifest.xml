@@ -10,18 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.AddTipActivity"
-            android:screenOrientation="portrait"
             android:label="@string/add_tip"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:parentActivityName=".activity.NavigationActivity"></activity>
         <activity
             android:name=".activity.NavigationActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AuthActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
