@@ -166,8 +166,8 @@ public class NavigationActivity extends AppCompatActivity {
                 .withIcon(getResources().getDrawable(R.drawable.ic_share))
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    drawer.closeDrawer();
                     showShareMenu();
+                    drawer.closeDrawer();
                     return true;
                 });
 
@@ -178,9 +178,9 @@ public class NavigationActivity extends AppCompatActivity {
                 .withName(R.string.drawer_item_tips_active)
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    drawer.closeDrawer();
                     Fragment fragment = TipsFragment.newInstance(accessLevel, true);
                     Utilities.setFragment(fragmentManager, fragment, R.id.flContent);
+                    drawer.closeDrawer();
                     return true;
                 });
 
@@ -190,9 +190,9 @@ public class NavigationActivity extends AppCompatActivity {
                 .withName(R.string.drawer_item_tips_archive)
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    drawer.closeDrawer();
                     Fragment fragment = TipsFragment.newInstance(accessLevel, false);
                     Utilities.setFragment(fragmentManager, fragment, R.id.flContent);
+                    drawer.closeDrawer();
                     return true;
                 });
 
