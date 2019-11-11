@@ -224,8 +224,19 @@ public class NavigationActivity extends AppCompatActivity {
                 .withIcon(getResources().getDrawable(R.drawable.ic_users))
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    drawer.closeDrawer();
                     Utilities.setFragment(fragmentManager, UsersFragment.class, R.id.flContent);
+                    drawer.closeDrawer();
+                    return true;
+                });
+
+
+        PrimaryDrawerItem itemChat = new PrimaryDrawerItem()
+                .withEnabled(accessLevel > 1)
+                .withName(R.string.drawer_item_chat)
+                .withIcon(getResources().getDrawable(R.drawable.ic_chat))
+                .withTextColor(getResources().getColor(R.color.colorText))
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    startActivity(new Intent(this, ChatActivity.class));
                     return true;
                 });
 
@@ -253,6 +264,7 @@ public class NavigationActivity extends AppCompatActivity {
                         // Put Tip items here
                         itemTips,
                         // Put Chat item here
+                        itemChat,
                         new DividerDrawerItem(),
                         // Put Users item here
                         itemUsers,

@@ -9,15 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AddTipActivity"
-            android:label="@string/add_tip"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+        <activity android:name=".activity.ChatActivity"
+            android:parentActivityName=".activity.NavigationActivity"
             android:configChanges="orientation"
-            android:parentActivityName=".activity.NavigationActivity"></activity>
+            android:label="@string/chat"
+            ></activity>
+        <activity
+            android:name=".activity.AddTipActivity"
+            android:configChanges="orientation"
+            android:label="@string/add_tip"
+            android:parentActivityName=".activity.NavigationActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.NavigationActivity"
-            android:launchMode="singleTop"
             android:configChanges="orientation"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AuthActivity"
