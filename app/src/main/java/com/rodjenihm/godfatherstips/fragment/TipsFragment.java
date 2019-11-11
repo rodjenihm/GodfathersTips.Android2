@@ -2,9 +2,12 @@ package com.rodjenihm.godfatherstips.fragment;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.format.DateFormat;
@@ -20,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.TipViewHolder;
+import com.rodjenihm.godfatherstips.TipsFirestoreRecyclerAdapter;
 import com.rodjenihm.godfatherstips.UserViewHolder;
 import com.rodjenihm.godfatherstips.model.AppUser;
 import com.rodjenihm.godfatherstips.model.Tip;
@@ -28,7 +32,7 @@ import com.rodjenihm.godfatherstips.model.Tip;
  * A simple {@link Fragment} subclass.
  */
 public class TipsFragment extends Fragment {
-    private FirestoreRecyclerAdapter adapter;
+    private TipsFirestoreRecyclerAdapter adapter;
     private static String ACCESS_LEVEL = "accessLevel";
     private static String ACTIVE = "active";
     private int accessLevel = 1;
@@ -86,65 +90,35 @@ public class TipsFragment extends Fragment {
                 .setQuery(query, Tip.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<Tip, TipViewHolder>(options) {
-            @Override
-            public void onBindViewHolder(TipViewHolder holder, int position, Tip model) {
-                int status = model.getStatus();
+        adapter = new TipsFirestoreRecyclerAdapter(options);
 
-                switch (status) {
-                    case 1:
-                        holder.view.setBackground(getResources().getDrawable(R.drawable.tip_active));
-                        if (accessLevel == 3) {
-                            holder.archiveView.setVisibility(View.VISIBLE);
-                            holder.archiveView.setOnClickListener(v -> {
-                                String[] options = {"won", "lost"};
+        RecyclerView tipsList = view.findViewById(R.id.tips_list);
+        tipsList.setAdapter(adapter);
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Pick tip status");
-                                builder.setItems(options, (dialog, which) -> {
-                                    String tipId = holder.item.getTipId();
-                                    FirebaseFirestore.getInstance()
-                                            .collection("tips")
-                                            .document(tipId)
-                                            .update("status", which + 2)
-                                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                                });
-                                builder.show();
-                            });
-                        }
-                        break;
-                    case 2:
-                        holder.view.setBackground(getResources().getDrawable(R.drawable.tip_won));
-                        holder.archiveView.setVisibility(View.GONE);
-                        break;
-                    case 3:
-                        holder.view.setBackground(getResources().getDrawable(R.drawable.tip_lost));
-                        holder.archiveView.setVisibility(View.GONE);
-                        break;
-                    default:
-                        break;
+        if (accessLevel == 3 && active) {
+            new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
                 }
 
-                holder.item = model;
-                holder.rivalsView.setText(model.getRivals());
-                holder.timeView.setText(model.getTime());
-                holder.tipView.setText(model.getTip());
-                holder.oddsView.setText(model.getOdds());
-            }
-
-            @Override
-            public TipViewHolder onCreateViewHolder(ViewGroup group, int i) {
-                View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.tip, group, false);
-
-                return new TipViewHolder(view);
-            }
-        };
-
-        RecyclerView usersList = view.findViewById(R.id.tips_list);
-        usersList.setAdapter(adapter);
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    int position = viewHolder.getAdapterPosition();
+                    new AlertDialog.Builder(viewHolder.itemView.getContext())
+                            .setMessage("Pick tip status")
+                            .setPositiveButton("Won", (dialog, id) -> {
+                                adapter.archiveItem(position, 2);
+                            })
+                            .setNegativeButton("Lost", (dialog, id) -> {
+                                adapter.archiveItem(position, 3);
+                            })
+                            .setOnCancelListener(dialog -> adapter.notifyItemChanged(position))
+                            .create().show();
+                }
+            }).attachToRecyclerView(tipsList);
+        }
 
         return view;
     }
-
 }

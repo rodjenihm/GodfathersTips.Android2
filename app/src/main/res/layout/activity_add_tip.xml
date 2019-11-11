@@ -7,7 +7,7 @@
     android:scrollbars="vertical"
     android:fillViewport="true"
     android:focusableInTouchMode="true"
-    android:background="@color/colorBackground"
+    android:background="@color/colorBackgroundLight"
     tools:context=".activity.AddTipActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout

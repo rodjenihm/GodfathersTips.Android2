@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.UserViewHolder;
+import com.rodjenihm.godfatherstips.UsersFirestoreRecyclerAdapter;
 import com.rodjenihm.godfatherstips.model.AppUser;
 
 
@@ -55,75 +56,7 @@ public class UsersFragment extends Fragment {
                 .setQuery(query, AppUser.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<AppUser, UserViewHolder>(options) {
-            @Override
-            public void onBindViewHolder(UserViewHolder holder, int position, AppUser model) {
-                String status;
-                int accessLevel = model.getAccessLevel();
-
-                switch (accessLevel) {
-                    case 1:
-                        status = "MEMBER";
-                        holder.switchView.setVisibility(View.VISIBLE);
-                        holder.switchView.setChecked(false);
-                        break;
-                    case 2:
-                        status = "VIP";
-                        holder.switchView.setVisibility(View.VISIBLE);
-                        holder.switchView.setChecked(true);
-                        break;
-                    case 3:
-                        status = "ADMIN";
-                        break;
-                    default:
-                        status = "";
-                        break;
-                }
-
-                holder.item = model;
-                holder.emailView.setText(model.getEmail());
-                holder.createdAtView.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getCreatedAt()));
-                holder.statusView.setText(status);
-                holder.switchView.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    String Uid = model.getUserId();
-                    if (isChecked) {
-                        FirebaseFirestore.getInstance()
-                                .collection("users")
-                                .document(Uid)
-                                .update("accessLevel", 2)
-                                .addOnSuccessListener(aVoid -> {
-                                    FirebaseFirestore.getInstance()
-                                            .collection("roles")
-                                            .document("VIP")
-                                            .update("users", FieldValue.arrayUnion(Uid))
-                                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                                })
-                                .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                    } else {
-                        FirebaseFirestore.getInstance()
-                                .collection("users")
-                                .document(Uid)
-                                .update("accessLevel", 1)
-                                .addOnSuccessListener(aVoid -> {
-                                    FirebaseFirestore.getInstance()
-                                            .collection("roles")
-                                            .document("VIP")
-                                            .update("users", FieldValue.arrayRemove(Uid))
-                                            .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                                })
-                                .addOnFailureListener(e -> Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                    }
-                });
-            }
-
-            @Override
-            public UserViewHolder onCreateViewHolder(ViewGroup group, int i) {
-                View view = LayoutInflater.from(group.getContext())
-                        .inflate(R.layout.user, group, false);
-
-                return new UserViewHolder(view);
-            }
-        };
+        adapter = new UsersFirestoreRecyclerAdapter(options);
 
         RecyclerView usersList = view.findViewById(R.id.users_list);
         usersList.setAdapter(adapter);
