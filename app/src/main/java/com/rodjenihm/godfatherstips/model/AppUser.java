@@ -7,17 +7,15 @@ public class AppUser implements Serializable {
     private int accessLevel = 1;
     private Date createdAt = new Date();
     private String email;
-    private boolean emailVerified;
     private String userId;
 
     public AppUser() {
     }
 
-    public AppUser(String userId, String email, boolean emailVerified, Date createdAt, int accessLevel) {
+    public AppUser(String userId, String email, Date createdAt, int accessLevel) {
         this.accessLevel = accessLevel;
         this.createdAt = createdAt;
         this.email = email;
-        this.emailVerified = emailVerified;
         this.userId = userId;
     }
 
@@ -43,14 +41,6 @@ public class AppUser implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(boolean emailVerified) {
-        this.emailVerified = emailVerified;
     }
 
     public String getUserId() {

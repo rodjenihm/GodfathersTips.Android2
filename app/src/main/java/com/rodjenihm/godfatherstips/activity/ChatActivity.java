@@ -1,26 +1,18 @@
 package com.rodjenihm.godfatherstips.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.rodjenihm.godfatherstips.MessageRecyclerAdapter;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.model.Message;
@@ -32,6 +24,19 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     private MessageRecyclerAdapter adapter;
+    private ListenerRegistration registration;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        registration.remove();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +62,6 @@ public class ChatActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
 
             input.setText("");
-            input.clearFocus();
         });
 
         List<Message> messageList = new ArrayList<>();
@@ -67,7 +71,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Query query = FirebaseFirestore.getInstance().collection("messages").orderBy("time", Query.Direction.ASCENDING);
 
-        query.
+        registration = query.
                 addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
                         Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
@@ -78,9 +82,9 @@ public class ChatActivity extends AppCompatActivity {
                         if (doc != null) {
                             if (doc.getType() == DocumentChange.Type.ADDED) {
                                 messageList.add(doc.getDocument().toObject(Message.class));
+                                adapter.notifyDataSetChanged();
                                 listOfMessages.scrollToPosition(messageList.size() - 1);
                             }
-                            adapter.notifyDataSetChanged();
                         }
                     }
                 });

@@ -6,19 +6,15 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.rodjenihm.godfatherstips.R;
-import com.rodjenihm.godfatherstips.UserViewHolder;
 import com.rodjenihm.godfatherstips.UsersFirestoreRecyclerAdapter;
 import com.rodjenihm.godfatherstips.model.AppUser;
 

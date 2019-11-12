@@ -29,7 +29,7 @@ public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppU
 
     @Override
     protected void onBindViewHolder(@NonNull UserViewHolder userViewHolder, int i, @NonNull AppUser user) {
-        userViewHolder.view.setBackground(userViewHolder.view.getResources().getDrawable(R.drawable.user_custom));
+        userViewHolder.view.setBackground(userViewHolder.view.getResources().getDrawable(R.drawable.user));
 
         String status;
         int accessLevel = user.getAccessLevel();

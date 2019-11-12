@@ -117,7 +117,6 @@ public class CreateAccountFragment extends Fragment {
                     AppUser user = new AppUser();
                     user.setUserId(Uid);
                     user.setEmail(email);
-                    user.setEmailVerified(true);
                     user.setCreatedAt(new Date());
                     user.setAccessLevel(1);
 
