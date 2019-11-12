@@ -1,9 +1,11 @@
 package com.rodjenihm.godfatherstips;
 
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
@@ -33,9 +35,13 @@ public class MessageFirestoreRecyclerAdapter  extends FirestoreRecyclerAdapter<M
         messageViewHolder.textView.setText(message.getText());
 
         if (message.getSenderEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-            view.setBackground(view.getResources().getDrawable(R.drawable.custom_message_owner));
+            view.findViewById(R.id.message_container).setBackground(view.getResources().getDrawable(R.drawable.custom_message_owner));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.weight = 1.0f;
+            params.gravity = Gravity.END;
+            view.findViewById(R.id.message_container).setLayoutParams(params);
         } else {
-            view.setBackground(view.getResources().getDrawable(R.drawable.custom_message));
+            view.findViewById(R.id.message_container).setBackground(view.getResources().getDrawable(R.drawable.custom_message));
         }
     }
 
@@ -47,4 +53,6 @@ public class MessageFirestoreRecyclerAdapter  extends FirestoreRecyclerAdapter<M
 
         return new MessageViewHolder(view);
     }
+
+
 }

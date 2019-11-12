@@ -22,18 +22,6 @@ public class ChatActivity extends AppCompatActivity {
     private MessageFirestoreRecyclerAdapter adapter;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
@@ -42,6 +30,10 @@ public class ChatActivity extends AppCompatActivity {
 
         fab.setOnClickListener(view1 -> {
             EditText input = findViewById(R.id.input);
+
+            if (input.getText().toString().trim().length() <= 0) {
+                return;
+            }
 
             Message obj = new Message();
             obj.setText(input.getText().toString());
@@ -53,12 +45,13 @@ public class ChatActivity extends AppCompatActivity {
                     .add(obj)
                     .addOnFailureListener(e -> Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
 
-            input.clearFocus();
             input.setText("");
+            input.clearFocus();
         });
 
-        Query query = FirebaseFirestore.getInstance().collection("messages");
+        Query query = FirebaseFirestore.getInstance().collection("messages").orderBy("time", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
+                .setLifecycleOwner(this)
                 .setQuery(query, Message.class)
                 .build();
 

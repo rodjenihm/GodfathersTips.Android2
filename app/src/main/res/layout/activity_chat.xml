@@ -43,7 +43,7 @@
             android:focusableInTouchMode="true"
             android:inputType="textMultiLine"
             android:importantForAutofill="no"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/colorTextDark"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -54,6 +54,7 @@
         android:divider="@android:color/transparent"
         android:id="@+id/list_of_messages"
         app:layoutManager="LinearLayoutManager"
+        app:stackFromEnd="true"
         tools:context=".activity.ChatActivity"
         tools:listitem="@layout/message"/>
 </RelativeLayout>
