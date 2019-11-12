@@ -56,5 +56,5 @@
         app:layoutManager="LinearLayoutManager"
         app:stackFromEnd="true"
         tools:context=".activity.ChatActivity"
-        tools:listitem="@layout/message"/>
+        tools:listitem="@layout/message_received"/>
 </RelativeLayout>
