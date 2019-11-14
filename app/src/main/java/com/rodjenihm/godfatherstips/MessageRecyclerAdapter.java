@@ -59,4 +59,6 @@ public class MessageRecyclerAdapter extends RecyclerView.Adapter<MessageViewHold
         Message item = messageList.get(position);
         return item.getSenderEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()) ? MESSAGE_SENT : MESSAGE_RECEIVED;
     }
+
+
 }

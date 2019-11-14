@@ -1,6 +1,7 @@
 package com.rodjenihm.godfatherstips.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.rodjenihm.godfatherstips.MessageRecyclerAdapter;
 import com.rodjenihm.godfatherstips.R;
+import com.rodjenihm.godfatherstips.model.AppUser;
 import com.rodjenihm.godfatherstips.model.Message;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.util.List;
 
 
 public class ChatActivity extends AppCompatActivity {
+    private RecyclerView listOfMessages;
     private MessageRecyclerAdapter adapter;
     private ListenerRegistration registration;
 
@@ -35,6 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         registration.remove();
+        AppUser.CURRENT_USER.setLastSeen(new Date());
     }
 
     @Override
@@ -66,10 +70,13 @@ public class ChatActivity extends AppCompatActivity {
 
         List<Message> messageList = new ArrayList<>();
         adapter = new MessageRecyclerAdapter(messageList);
-        RecyclerView listOfMessages = findViewById(R.id.list_of_messages);
+        listOfMessages = findViewById(R.id.list_of_messages);
         listOfMessages.setAdapter(adapter);
 
-        Query query = FirebaseFirestore.getInstance().collection("messages").orderBy("time", Query.Direction.ASCENDING);
+        Query query = FirebaseFirestore.getInstance()
+                .collection("messages")
+                //.whereGreaterThan("time", AppUser.CURRENT_USER.getLastSeen())
+                .orderBy("time", Query.Direction.ASCENDING);
 
         registration = query.
                 addSnapshotListener((queryDocumentSnapshots, e) -> {
@@ -81,7 +88,8 @@ public class ChatActivity extends AppCompatActivity {
                     for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
                         if (doc != null) {
                             if (doc.getType() == DocumentChange.Type.ADDED) {
-                                messageList.add(doc.getDocument().toObject(Message.class));
+                                Message newMessage = doc.getDocument().toObject(Message.class);
+                                messageList.add(newMessage);
                                 adapter.notifyDataSetChanged();
                                 listOfMessages.scrollToPosition(messageList.size() - 1);
                             }

@@ -56,10 +56,8 @@ public class AuthActivity extends AppCompatActivity {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         dlg.dismiss();
-                        AppUser user = documentSnapshot.toObject(AppUser.class);
-                        Intent intent = new Intent(this, NavigationActivity.class);
-                        intent.putExtra("user", user);
-                        startActivity(intent);
+                        AppUser.CURRENT_USER = documentSnapshot.toObject(AppUser.class);
+                        startActivity(new Intent(this, NavigationActivity.class));
                         finish();
                     })
                     .addOnFailureListener(e -> {

@@ -4,19 +4,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class AppUser implements Serializable {
+    public static AppUser CURRENT_USER;
+
     private int accessLevel = 1;
     private Date createdAt = new Date();
+    private Date lastSeen;
     private String email;
     private String userId;
 
     public AppUser() {
     }
 
-    public AppUser(String userId, String email, Date createdAt, int accessLevel) {
+    public AppUser(String userId, String email, Date createdAt, Date lastSeen, int accessLevel) {
         this.accessLevel = accessLevel;
         this.createdAt = createdAt;
         this.email = email;
         this.userId = userId;
+        this.lastSeen = lastSeen;
     }
 
     public int getAccessLevel() {
@@ -49,5 +53,13 @@ public class AppUser implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Date getLastSeen() {
+        return lastSeen;
+    }
+
+    public void setLastSeen(Date lastSeen) {
+        this.lastSeen = lastSeen;
     }
 }

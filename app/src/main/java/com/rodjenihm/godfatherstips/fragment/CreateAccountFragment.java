@@ -118,6 +118,7 @@ public class CreateAccountFragment extends Fragment {
                     user.setUserId(Uid);
                     user.setEmail(email);
                     user.setCreatedAt(new Date());
+                    user.setLastSeen(new Date());
                     user.setAccessLevel(1);
 
                     firestore.collection("users")

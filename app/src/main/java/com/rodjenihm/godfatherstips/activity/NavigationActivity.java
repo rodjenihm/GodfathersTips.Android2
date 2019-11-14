@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +31,26 @@ import com.rodjenihm.godfatherstips.model.AppUser;
 
 public class NavigationActivity extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    AppUser user;
 
     private final FragmentManager fragmentManager = getSupportFragmentManager();
 
     private Drawer drawer = null;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("info", "Stopped!");
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i("time", AppUser.CURRENT_USER.getLastSeen().toString());
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(AppUser.CURRENT_USER.getUserId())
+                .update("lastSeen", AppUser.CURRENT_USER.getLastSeen());
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +62,9 @@ public class NavigationActivity extends AppCompatActivity {
             my_view.setVisibility(View.GONE);
         }
 
-        user = (AppUser) getIntent().getSerializableExtra("user");
 
-        int accessLevel = user.getAccessLevel();
-        drawer = buildContentMaterialDrawer(user, accessLevel);
+        int accessLevel = AppUser.CURRENT_USER.getAccessLevel();
+        drawer = buildContentMaterialDrawer(AppUser.CURRENT_USER, accessLevel);
     }
 
     private Drawer buildContentMaterialDrawer(AppUser user, int accessLevel) {
@@ -236,7 +251,9 @@ public class NavigationActivity extends AppCompatActivity {
                 .withIcon(getResources().getDrawable(R.drawable.ic_chat))
                 .withTextColor(getResources().getColor(R.color.colorText))
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    startActivity(new Intent(this, ChatActivity.class));
+                    Intent intent = new Intent(this, ChatActivity.class);
+                    intent.putExtra("user", user);
+                    startActivity(intent);
                     return true;
                 });
 
