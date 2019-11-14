@@ -64,4 +64,5 @@
     <string name="tip_successfully_added">Tip successfully added</string>
     <string name="archive">Archive</string>
     <string name="message">Enter message</string>
+    <string name="welcome_to_godfathers_tips">Welcome to Godfathers Tips</string>
 </resources>

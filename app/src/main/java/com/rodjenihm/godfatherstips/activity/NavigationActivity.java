@@ -44,7 +44,6 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.i("time", AppUser.CURRENT_USER.getLastSeen().toString());
         FirebaseFirestore.getInstance()
                 .collection("users")
                 .document(AppUser.CURRENT_USER.getUserId())
@@ -61,8 +60,7 @@ public class NavigationActivity extends AppCompatActivity {
             View my_view = findViewById(R.id.textView);
             my_view.setVisibility(View.GONE);
         }
-
-
+        
         int accessLevel = AppUser.CURRENT_USER.getAccessLevel();
         drawer = buildContentMaterialDrawer(AppUser.CURRENT_USER, accessLevel);
     }

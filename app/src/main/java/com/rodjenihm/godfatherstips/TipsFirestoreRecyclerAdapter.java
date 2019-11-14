@@ -60,7 +60,6 @@ public class TipsFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<Tip, 
     }
 
     public void archiveItem(int position, int value) {
-
         getSnapshots().getSnapshot(position).getReference()
                 .update("status", value)
                 .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
