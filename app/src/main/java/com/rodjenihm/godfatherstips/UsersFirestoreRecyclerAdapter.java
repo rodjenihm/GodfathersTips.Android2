@@ -5,19 +5,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.rodjenihm.godfatherstips.model.AppUser;
 
 public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppUser, UserViewHolder> {
     private View view;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -31,7 +32,9 @@ public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppU
 
     @Override
     protected void onBindViewHolder(@NonNull UserViewHolder userViewHolder, int i, @NonNull AppUser user) {
-        userViewHolder.view.setBackground(userViewHolder.view.getResources().getDrawable(R.drawable.user));
+        view = userViewHolder.view;
+
+        userViewHolder.view.setBackground(view.getResources().getDrawable(R.drawable.user));
 
         String status;
         int accessLevel = user.getAccessLevel();
@@ -59,36 +62,32 @@ public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppU
         userViewHolder.createdAtView.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", user.getCreatedAt()));
         userViewHolder.statusView.setText(status);
 
-        final String Uid = user.getUserId();
         userViewHolder.switchView.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                //grantVip(Uid);
-                db
-                        .collection("users")
-                        .document(Uid)
-                        .update("accessLevel", 2)
-                        .addOnSuccessListener(aVoid -> {
-                            db
-                                    .collection("roles")
-                                    .document("VIP")
-                                    .update("users", FieldValue.arrayUnion(Uid))
-                                    .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-            } else {
-                //removeVip(Uid);
-                db
-                        .collection("users")
-                        .document(Uid)
-                        .update("accessLevel", 1)
-                        .addOnSuccessListener(aVoid -> {
-                            db
-                                    .collection("roles")
-                                    .document("VIP")
-                                    .update("users", FieldValue.arrayRemove(Uid))
-                                    .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+            if (buttonView.isPressed()) {
+                DocumentReference userReference = getSnapshots().getSnapshot(i).getReference();
+                String uid = userReference.getId();
+
+                if (isChecked) {
+                    userReference
+                            .update("accessLevel", 2)
+                            .addOnSuccessListener(aVoid -> {
+                                FirebaseFirestore.getInstance()
+                                        .collection("roles")
+                                        .document("VIP")
+                                        .update("users", FieldValue.arrayUnion(uid));
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                } else {
+                    userReference
+                            .update("accessLevel", 1)
+                            .addOnSuccessListener(aVoid -> {
+                                FirebaseFirestore.getInstance()
+                                        .collection("roles")
+                                        .document("VIP")
+                                        .update("users", FieldValue.arrayRemove(uid));
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                }
             }
         });
     }
@@ -100,37 +99,5 @@ public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppU
                 .inflate(R.layout.user, parent, false);
 
         return new UserViewHolder(view);
-    }
-
-    private void removeVip(final String uid) {
-        db
-                .collection("users")
-                .document(uid)
-                .update("accessLevel", 1)
-                .addOnSuccessListener(aVoid -> {
-                    db
-                            .collection("roles")
-                            .document("VIP")
-                            .update("users", FieldValue.arrayRemove(uid))
-                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                })
-                .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-        Log.i("removeVip", uid);
-    }
-
-    private void grantVip(final String uid) {
-        db
-                .collection("users")
-                .document(uid)
-                .update("accessLevel", 2)
-                .addOnSuccessListener(aVoid -> {
-                    db
-                            .collection("roles")
-                            .document("VIP")
-                            .update("users", FieldValue.arrayUnion(uid))
-                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-                })
-                .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
-        Log.i("grantVip", uid);
     }
 }
