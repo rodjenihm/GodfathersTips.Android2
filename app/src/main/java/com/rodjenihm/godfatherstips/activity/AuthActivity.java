@@ -55,8 +55,13 @@ public class AuthActivity extends AppCompatActivity {
                     .document(currentUser.getUid())
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        dlg.dismiss();
                         AppUser.CURRENT_USER = documentSnapshot.toObject(AppUser.class);
+
+                        if (AppUser.CURRENT_USER.getAccessLevel() > 1) {
+                            // update local DB messages and tips
+                        }
+
+                        dlg.dismiss();
                         startActivity(new Intent(this, NavigationActivity.class));
                         finish();
                     })
