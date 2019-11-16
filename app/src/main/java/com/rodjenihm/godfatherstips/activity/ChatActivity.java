@@ -58,6 +58,7 @@ public class ChatActivity extends AppCompatActivity {
             obj.setText(input.getText().toString());
             obj.setTime(new Date());
             obj.setSenderEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            obj.setMessageId(String.valueOf(obj.hashCode()));
 
             FirebaseFirestore.getInstance()
                     .collection("messages")

@@ -1,6 +1,15 @@
 package com.rodjenihm.godfatherstips.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.rodjenihm.godfatherstips.DateConverter;
+
+@Entity
+@TypeConverters(DateConverter.class)
 public class Tip {
+    @PrimaryKey
     private String tipId;
     private String rivals;
     private String time;

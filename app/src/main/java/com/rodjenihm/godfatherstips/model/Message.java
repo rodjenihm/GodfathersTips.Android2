@@ -2,10 +2,14 @@ package com.rodjenihm.godfatherstips.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.rodjenihm.godfatherstips.DateConverter;
 
 import java.util.Date;
 
 @Entity
+@TypeConverters(DateConverter.class)
 public class Message {
     @PrimaryKey
     private String messageId;
