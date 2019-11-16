@@ -1,7 +1,6 @@
 package com.rodjenihm.godfatherstips.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 

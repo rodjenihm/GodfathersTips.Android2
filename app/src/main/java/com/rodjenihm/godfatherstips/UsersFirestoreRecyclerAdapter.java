@@ -64,29 +64,10 @@ public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppU
 
         userViewHolder.switchView.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
-                DocumentReference userReference = getSnapshots().getSnapshot(i).getReference();
-                String uid = userReference.getId();
-
                 if (isChecked) {
-                    userReference
-                            .update("accessLevel", 2)
-                            .addOnSuccessListener(aVoid -> {
-                                FirebaseFirestore.getInstance()
-                                        .collection("roles")
-                                        .document("VIP")
-                                        .update("users", FieldValue.arrayUnion(uid));
-                            })
-                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                   grantVip(i);
                 } else {
-                    userReference
-                            .update("accessLevel", 1)
-                            .addOnSuccessListener(aVoid -> {
-                                FirebaseFirestore.getInstance()
-                                        .collection("roles")
-                                        .document("VIP")
-                                        .update("users", FieldValue.arrayRemove(uid));
-                            })
-                            .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                    removeVip(i);
                 }
             }
         });
@@ -99,5 +80,35 @@ public class UsersFirestoreRecyclerAdapter extends FirestoreRecyclerAdapter<AppU
                 .inflate(R.layout.user, parent, false);
 
         return new UserViewHolder(view);
+    }
+
+    private void grantVip(int position) {
+        DocumentReference userReference = getSnapshots().getSnapshot(position).getReference();
+        String uid = userReference.getId();
+
+        userReference
+                .update("accessLevel", 2)
+                .addOnSuccessListener(aVoid -> {
+                    FirebaseFirestore.getInstance()
+                            .collection("roles")
+                            .document("VIP")
+                            .update("users", FieldValue.arrayUnion(uid));
+                })
+                .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void removeVip(int position) {
+        DocumentReference userReference = getSnapshots().getSnapshot(position).getReference();
+        String uid = userReference.getId();
+
+        userReference
+                .update("accessLevel", 1)
+                .addOnSuccessListener(aVoid -> {
+                    FirebaseFirestore.getInstance()
+                            .collection("roles")
+                            .document("VIP")
+                            .update("users", FieldValue.arrayRemove(uid));
+                })
+                .addOnFailureListener(e -> Toast.makeText(view.getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show());
     }
 }
