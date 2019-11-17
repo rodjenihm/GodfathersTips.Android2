@@ -17,8 +17,8 @@ import com.rodjenihm.godfatherstips.MessageRecyclerAdapter;
 import com.rodjenihm.godfatherstips.R;
 import com.rodjenihm.godfatherstips.model.AppUser;
 import com.rodjenihm.godfatherstips.model.Message;
+import com.rodjenihm.godfatherstips.service.AppDatabase;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +36,9 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        registration.remove();
+        if (registration != null) {
+            registration.remove();
+        }
         AppUser.CURRENT_USER.setLastSeen(new Date());
     }
 
@@ -68,14 +70,14 @@ public class ChatActivity extends AppCompatActivity {
             input.setText("");
         });
 
-        List<Message> messageList = new ArrayList<>();
+        List<Message> messageList =  AppDatabase.getInstance(this).messageDao().getAll();
         adapter = new MessageRecyclerAdapter(messageList);
         listOfMessages = findViewById(R.id.list_of_messages);
         listOfMessages.setAdapter(adapter);
 
         Query query = FirebaseFirestore.getInstance()
                 .collection("messages")
-                //.whereGreaterThan("time", AppUser.CURRENT_USER.getLastSeen())
+                .whereGreaterThan("time", AppUser.CURRENT_USER.getLastSeen())
                 .orderBy("time", Query.Direction.ASCENDING);
 
         registration = query.
@@ -85,10 +87,12 @@ public class ChatActivity extends AppCompatActivity {
                         return;
                     }
 
-                    for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
-                        if (doc != null) {
-                            if (doc.getType() == DocumentChange.Type.ADDED) {
-                                Message newMessage = doc.getDocument().toObject(Message.class);
+                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                        if (dc != null) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                Message newMessage = dc.getDocument().toObject(Message.class);
+                                AppUser.CURRENT_USER.setLastSeen(newMessage.getTime());
+                                AppDatabase.getInstance(this).messageDao().insert(newMessage);
                                 messageList.add(newMessage);
                                 adapter.notifyDataSetChanged();
                                 listOfMessages.scrollToPosition(messageList.size() - 1);

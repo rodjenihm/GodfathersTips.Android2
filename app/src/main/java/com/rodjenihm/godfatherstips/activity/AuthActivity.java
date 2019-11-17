@@ -13,6 +13,7 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
@@ -23,6 +24,8 @@ import com.rodjenihm.godfatherstips.fragment.CreateAccountFragment;
 import com.rodjenihm.godfatherstips.fragment.ResetPasswordFragment;
 import com.rodjenihm.godfatherstips.fragment.SignInFragment;
 import com.rodjenihm.godfatherstips.model.AppUser;
+import com.rodjenihm.godfatherstips.model.Message;
+import com.rodjenihm.godfatherstips.service.AppDatabase;
 
 public class AuthActivity extends AppCompatActivity {
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -55,13 +58,8 @@ public class AuthActivity extends AppCompatActivity {
                     .document(currentUser.getUid())
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        AppUser.CURRENT_USER = documentSnapshot.toObject(AppUser.class);
-
-                        if (AppUser.CURRENT_USER.getAccessLevel() > 1) {
-                            // update local DB messages and tips
-                        }
-
                         dlg.dismiss();
+                        AppUser.CURRENT_USER = documentSnapshot.toObject(AppUser.class);
                         startActivity(new Intent(this, NavigationActivity.class));
                         finish();
                     })

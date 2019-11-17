@@ -39,7 +39,6 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("info", "Stopped!");
     }
 
     @Override
